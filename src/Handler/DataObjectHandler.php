@@ -5,7 +5,6 @@ namespace SilverLeague\LogViewer\Handler;
 use Monolog\Logger;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\AbstractProcessingHandler;
-use Monolog\LogRecord;
 use SilverLeague\LogViewer\Model\LogEntry;
 use SilverStripe\Core\Config\Config;
 
@@ -38,26 +37,26 @@ class DataObjectHandler extends AbstractProcessingHandler
      *
      * @var string
      */
-    protected string $objectClass;
+    protected $objectClass;
 
     /**
      * @param string  $objectClass The DataObject class to use for handling the write
      * @param int     $level       The minimum logging level at which this handler will be triggered (configurable)
      * @param boolean $bubble      Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct(string $objectClass = self::DEFAULT_CLASS, int $level = Logger::DEBUG, bool $bubble = true)
+    public function __construct($objectClass = self::DEFAULT_CLASS, $level = Logger::DEBUG, $bubble = true)
     {
         $this->setObjectClass($objectClass);
         $level = $this->getMinimumLogLevel();
         parent::__construct($level, $bubble);
     }
 
-    protected function getDefaultFormatter(): JsonFormatter
+    protected function getDefaultFormatter()
     {
         return new JsonFormatter;
     }
 
-    protected function write(LogRecord $record): void
+    protected function write(array $record)
     {
         $this->addDataObject((string) $record['formatted'], $record['level_name']);
     }
@@ -69,7 +68,7 @@ class DataObjectHandler extends AbstractProcessingHandler
      * @param  string $level   The log level text, e.g. "DEBUG"
      * @return int             The written DataObject ID
      */
-    public function addDataObject(string $message, string $level): int
+    public function addDataObject($message, $level)
     {
         $class = $this->getObjectClass();
 
@@ -87,7 +86,7 @@ class DataObjectHandler extends AbstractProcessingHandler
      * @param  string $class
      * @return $this
      */
-    public function setObjectClass(string $class): self
+    public function setObjectClass($class)
     {
         $this->objectClass = $class;
         return $this;
@@ -98,7 +97,7 @@ class DataObjectHandler extends AbstractProcessingHandler
      *
      * @return string
      */
-    public function getObjectClass(): string
+    public function getObjectClass()
     {
         return $this->objectClass;
     }
@@ -109,7 +108,7 @@ class DataObjectHandler extends AbstractProcessingHandler
      * @see \Monolog\Logger
      * @return int
      */
-    public function getMinimumLogLevel(): int
+    public function getMinimumLogLevel()
     {
         return (int) Config::inst()->get(LogEntry::class, 'minimum_log_level');
     }

@@ -16,14 +16,14 @@ use SilverStripe\Security\PermissionProvider;
  */
 class LogEntry extends DataObject implements PermissionProvider
 {
-    private static string $table_name = 'LogEntry';
+    private static $table_name = 'LogEntry';
 
-    private static array $db = [
+    private static $db = [
         'Entry'    => 'Text',
         'Level'    => 'Varchar'
     ];
 
-    private static array $summary_fields = [
+    private static $summary_fields = [
         'Entry',
         'Created',
         'Level'
@@ -36,7 +36,7 @@ class LogEntry extends DataObject implements PermissionProvider
      * @config
      * @var bool
      */
-    private static bool $cron_enabled = true;
+    private static $cron_enabled = true;
 
     /**
      * How often the cron should run (default: 4am daily)
@@ -44,7 +44,7 @@ class LogEntry extends DataObject implements PermissionProvider
      * @config
      * @var string
      */
-    private static string $cron_schedule = '0 4 * * *';
+    private static $cron_schedule = '0 4 * * *';
 
     /**
      * The maximum age in days for a LogEntry before it will be removed
@@ -52,7 +52,7 @@ class LogEntry extends DataObject implements PermissionProvider
      * @config
      * @var int
      */
-    private static int $max_log_age = 30;
+    private static $max_log_age = 30;
 
     /**
      * Which Monolog\Logger levels (numeric) to start handling from (see class for examples)
@@ -60,12 +60,12 @@ class LogEntry extends DataObject implements PermissionProvider
      * @config
      * @var integer
      */
-    private static int $minimum_log_level = 300;
+    private static $minimum_log_level = 300;
 
     /**
      * Permissions
      */
-    public function providePermissions(): array
+    public function providePermissions()
     {
         return [
             'DELETE_ENTRY' => [
@@ -109,7 +109,7 @@ class LogEntry extends DataObject implements PermissionProvider
      *
      * {@inheritDoc}
      */
-    public function canCreate($member = null, $context = []): false
+    public function canCreate($member = null, $context = [])
     {
         return false;
     }
@@ -119,17 +119,17 @@ class LogEntry extends DataObject implements PermissionProvider
      *
      * {@inheritDoc}
      */
-    public function canEdit($member = null): false
+    public function canEdit($member = null)
     {
         return false;
     }
 
-    public function canDelete($member = null): bool | int
+    public function canDelete($member = null)
     {
         return Permission::checkMember($member, ['DELETE_ENTRY', 'CMS_ACCESS_LogViewerAdmin']);
     }
 
-    public function canView($member = null): bool | int
+    public function canView($member = null)
     {
         return Permission::checkMember($member, ['VIEW_ENTRY', 'CMS_ACCESS_LogViewerAdmin']);
     }
