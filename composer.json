@@ -15,7 +15,7 @@
     "require": {
         "silverstripe/admin": "^2.0.0-beta1",
         "silverstripe/framework": "^5",
-        "monolog/monolog": "~1.11",
+        "monolog/monolog": "~1.11.0",
         "silverstripe/crontask": "^3.0.0-beta1"
     },
     "require-dev": {
